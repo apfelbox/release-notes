@@ -1,5 +1,16 @@
 {
 	"extends": "@21torr/firefly/configs/tsconfig.json",
+	"compilerOptions": {
+		"lib": [
+			"dom",
+			"es2015",
+			"es2016",
+			"es2017",
+			"es2018",
+			"es2019",
+			"es2020"
+		]
+	},
 	"include": [
 		"**/*.tsx",
 		"**/*.ts",
