@@ -1,7 +1,8 @@
 import {findFirst} from "@21torr/dune/dom/traverse";
 import {on} from "@21torr/dune/dom/events";
 
-const button = findFirst<HTMLButtonElement>("#changelog-run");
+const buttonGithub = findFirst<HTMLButtonElement>("#changelog-run-github");
+const buttonGitlab = findFirst<HTMLButtonElement>("#changelog-run-gitlab");
 const result = findFirst<HTMLDivElement>("#changelog-result");
 const output = findFirst<HTMLDivElement>("#changelog-output");
 const input = findFirst<HTMLTextAreaElement>("#changelog-input");
@@ -18,15 +19,16 @@ const CATEGORY_LABELS = {
 
 type GroupedMessages = Record<keyof typeof CATEGORY_LABELS, string[]>;
 
-if (button && result && output && input)
+if (buttonGithub && buttonGitlab && result && output && input)
 {
-	on(button, "click", () => run(result, output, input));
+	on(buttonGithub, "click", () => run(result, output, input, true));
+	on(buttonGitlab, "click", () => run(result, output, input, false));
 }
 
 /**
  * Runs the conversion and updates the fields
  */
-function run (result: HTMLDivElement, output: HTMLDivElement, input: HTMLTextAreaElement) : void
+function run (result: HTMLDivElement, output: HTMLDivElement, input: HTMLTextAreaElement, isFullOutput: boolean) : void
 {
 	result.classList.remove("d-none");
 	output.classList.remove("text-danger");
@@ -34,7 +36,7 @@ function run (result: HTMLDivElement, output: HTMLDivElement, input: HTMLTextAre
 	try
 	{
 		const parsedCategories = parseInput(input.value);
-		const result = transformToMarkdown(parsedCategories);
+		const result = transformToMarkdown(parsedCategories, isFullOutput);
 
 		output.textContent = result;
 
@@ -93,7 +95,7 @@ function parseInput (text: string) : GroupedMessages
 /**
  * Transforms the grouped messages to rendered markdown
  */
-function transformToMarkdown (groupedMessages: GroupedMessages) : string|null
+function transformToMarkdown (groupedMessages: GroupedMessages, isFullOutput: boolean) : string|null
 {
 	const result = [];
 
@@ -125,9 +127,13 @@ function transformToMarkdown (groupedMessages: GroupedMessages) : string|null
 
 	result.push("");
 	result.push("");
-	result.push("---");
-	result.push("");
-	result.push("");
+
+	if (isFullOutput)
+	{
+		result.push("---");
+		result.push("");
+		result.push("");
+	}
 
 	return result.join("\n");
 }

@@ -11,6 +11,7 @@
             .form-changelog-input {
                 min-height: 250px;
                 resize: vertical;
+                font-family: monospace;
             }
         </style>
     </head>
@@ -21,7 +22,8 @@
                 <label for="changelog-input">Changelog</label>
                 <textarea class="form-control form-changelog-input" id="changelog-input" rows="3"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary" id="changelog-run">Generate</button>
+            <button type="submit" class="btn btn-primary" id="changelog-run-github">Generate for Github</button>
+            <button type="submit" class="btn btn-primary" id="changelog-run-gitlab">Generate for Gitlab</button>
             (will automatically copy to the clipboard)
 
             <div class="mt-5 d-none" id="changelog-result">
