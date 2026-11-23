@@ -26,4 +26,4 @@ where `type` is one of the types below and `text` is just free text.
 | `(deprecation)`   | **Deprecations**      | Lists all added deprecations. |
 | `(docs)`          | **Documentation**     | Changes in the documentation. |
 | `(internal)`      | **Internal**          | Internal changes / refactorings that should have no functional impact on the end user. |
-
+| `(security)`      | **Security**          | Security-relevant changes.|
