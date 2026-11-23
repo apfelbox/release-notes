@@ -10,6 +10,7 @@ const input = findFirst<HTMLTextAreaElement>("#changelog-input");
 const CATEGORY_LABELS = {
 	bc: ":boom: Breaking Changes",
 	feature: ":gift: New Features",
+	security: ":shield: Security",
 	improvement: ":sparkles: Improvements",
 	bug: ":bug: Bug Fixes",
 	deprecation: ":wave: Deprecations",
