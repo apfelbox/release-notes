@@ -61,18 +61,33 @@ function parseInput (text: string) : GroupedMessages
 			.map(label => ([label, []]))
 	) as GroupedMessages;
 
+	// the messages list and index of the last top-level entry, so that indented lines can be appended to it
+	let previous: {messages: string[], index: number}|null = null;
+
 	text
 		.split("\n")
 		.forEach(line =>
 		{
-			line = line.trim();
+			line = line.trimEnd();
 
-			if ("" === line)
+			if ("" === line.trim())
 			{
 				return;
 			}
 
-			const matchResult = /^\s*\*\s*\((?<category>.+?)\)(?<content>.+)$/.exec(line);
+			// indented lines (line breaks or nested list items) belong to the previous top-level entry
+			if (/^\s/.test(line))
+			{
+				if (!previous)
+				{
+					throw new Error(`Found indented line without a top-level entry: "${line.trim()}"`);
+				}
+
+				previous.messages[previous.index] += `\n${line}`;
+				return;
+			}
+
+			const matchResult = /^\*\s*\((?<category>.+?)\)(?<content>.+)$/.exec(line);
 
 			if (!matchResult)
 			{
@@ -88,6 +103,7 @@ function parseInput (text: string) : GroupedMessages
 			}
 
 			categories[category].push(content);
+			previous = {messages: categories[category], index: categories[category].length - 1};
 		});
 
 	return categories;
